@@ -6,6 +6,8 @@
       wrong: isWrong(),
       present: isPresent(),
       correct: isCorrect(),
+      flipin: flipin,
+      flipout: flipout,
     }"
   >
     {{ this.value.toLocaleUpperCase() }}
@@ -24,13 +26,31 @@ export default {
       return this.value != " ";
     },
     isWrong() {
-      return this.state == 0;
+      return this.state == 0 && this.colored;
     },
     isPresent() {
-      return this.state == 1;
+      return this.state == 1 && this.colored;
     },
     isCorrect() {
-      return this.state == 2;
+      return this.state == 2 && this.colored;
+    },
+  },
+  data() {
+    return {
+      flipin: false,
+      flipout: false,
+      colored: false,
+    };
+  },
+  watch: {
+    state: function () {
+      this.flipin = true;
+      console.log("asd0");
+      setTimeout(() => {
+        this.colored = true;
+        this.flipout = true;
+        this.flipin = false;
+      }, 250);
     },
   },
 };
@@ -54,7 +74,7 @@ div.box {
 }
 
 div.typed {
-  border: solid #73767a 3px;
+  border: solid #878a8c 3px;
   animation: typed 100ms;
 }
 
@@ -71,17 +91,44 @@ div.typed {
 }
 
 div.wrong {
-  background: #73767a;
-  border: solid #73767a 3px;
+  background: #787c7e;
+  border: solid #787c7e 3px;
 }
 
 div.present {
-  background: #d4d237;
-  border: solid #d4d237 3px;
+  background: #c9b458;
+  border: solid #c9b458 3px;
 }
 
 div.correct {
-  background: #2ec83b;
-  border: solid #2ec83b 3px;
+  background: #6aaa64;
+  border: solid #6aaa64 3px;
+}
+
+div.flipin {
+  animation: FlipIn 250ms ease-in;
+}
+
+div.flipout {
+  color: white;
+  animation: FlipOut 250ms ease-out forwards;
+}
+
+@keyframes FlipIn {
+  0% {
+    transform: rotateX(0);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes FlipOut {
+  0% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
 }
 </style>
