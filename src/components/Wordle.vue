@@ -5,6 +5,7 @@
       :key="index"
       :values="value"
       :states="states[index]"
+      :invalid="invalids[index]"
     ></WordleRow>
   </div>
 </template>
@@ -22,6 +23,7 @@ export default {
       current: 0,
       index: 0,
       values: ["     ", "     ", "     ", "     ", "     ", "     "],
+      invalids: [false, false, false, false, false, false],
       states: [
         [-1, -1, -1, -1, -1],
         [-1, -1, -1, -1, -1],
@@ -33,32 +35,35 @@ export default {
       allowedWords: {},
       possibleAnswers: {},
       answer: "",
+      flipping: false,
     };
   },
   methods: {
     handleKeyPress(event) {
-      if (event.key == "Enter") {
-        if (this.index == 5) {
-          this.handleSubmission();
+      if (!this.flipping) {
+        if (event.key == "Enter") {
+          if (this.index == 5) {
+            this.handleSubmission();
+          }
+          return;
+        } else if (event.key == "Backspace") {
+          this.values[this.current] =
+            this.values[this.current].substring(0, this.index - 1) +
+            this.values[this.current].substring(this.index);
+
+          if (this.values[this.current].length < 5) {
+            this.values[this.current] += " ";
+          }
+
+          if (this.index > 0) this.index--;
+        } else if (event.which >= 65 && event.which <= 90 && this.index < 5) {
+          this.values[this.current] =
+            this.values[this.current].substring(0, this.index) +
+            event.key +
+            this.values[this.current].substring(this.index + 1);
+
+          this.index++;
         }
-        return;
-      } else if (event.key == "Backspace") {
-        this.values[this.current] =
-          this.values[this.current].substring(0, this.index - 1) +
-          this.values[this.current].substring(this.index);
-
-        if (this.values[this.current].length < 5) {
-          this.values[this.current] += " ";
-        }
-
-        if (this.index > 0) this.index--;
-      } else if (event.which >= 65 && event.which <= 90 && this.index < 5) {
-        this.values[this.current] =
-          this.values[this.current].substring(0, this.index) +
-          event.key +
-          this.values[this.current].substring(this.index + 1);
-
-        this.index++;
       }
     },
     handleSubmission() {
@@ -68,9 +73,6 @@ export default {
       ) {
         if (this.values[this.current] == this.answer) {
           console.log("You Win!");
-          window.removeEventListener("keyup", this.handleKeyPress);
-        } else if (this.current == 5) {
-          console.log("You Lose!");
           window.removeEventListener("keyup", this.handleKeyPress);
         }
 
@@ -107,11 +109,22 @@ export default {
           }, 300 * i);
         }
 
+        this.flipping = true;
         setTimeout(() => {
+          if (this.current == 5) {
+            console.log("You Lose!");
+            window.removeEventListener("keyup", this.handleKeyPress);
+            alert(`Answer is: ${this.answer}!`);
+          }
           this.index = 0;
           this.current++;
+          this.flipping = false;
         }, 300 * this.states[this.current].length);
       } else {
+        this.invalids[this.current] = true;
+        setTimeout(() => {
+          this.invalids[this.current] = false;
+        }, 600);
         console.log("Invalid Word");
       }
     },
@@ -126,8 +139,6 @@ export default {
         this.answer = Object.keys(this.possibleAnswers);
         this.answer =
           this.answer[Math.floor(Math.random() * this.answer.length)];
-
-        console.log(this.answer);
       });
   },
   unmounted: function () {

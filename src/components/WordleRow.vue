@@ -4,6 +4,7 @@
     :key="n"
     :value="this.values.at(n - 1)"
     :state="this.states[n - 1]"
+    :invalid="this.invalid"
   ></WordleTile>
 </template>
 
@@ -15,7 +16,7 @@ export default {
   components: {
     WordleTile,
   },
-  props: ["values", "states"],
+  props: ["values", "states", "invalid"],
 };
 </script>
 

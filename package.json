@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "servebuild": "live-server dist --port=80 --no-browser"
   },
   "dependencies": {
     "core-js": "^3.6.5",
