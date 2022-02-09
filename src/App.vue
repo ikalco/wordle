@@ -12,8 +12,11 @@ export default {
 };
 </script>
 
-<style scoped>
-Wordle {
-  text-align: center;
+<style>
+#app {
+  display: grid;
+  grid-template-rows: 100vh;
+  align-items: center;
+  justify-items: center;
 }
 </style>
