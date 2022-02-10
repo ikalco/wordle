@@ -79,7 +79,8 @@ export default {
           let answerr = this.answer;
           if (char == answerr[i]) {
             newstate[i] = 2;
-            answer = answer.substring(0, i - 1) + answer.substring(i);
+            let index = answer.indexOf(char);
+            answer = answer.substring(0, index) + answer.substring(index + 1);
           } else if (!answerr.includes(char)) {
             newstate[i] = 0;
           }
@@ -104,14 +105,21 @@ export default {
 
         this.flipping = true;
         setTimeout(() => {
+          for (let i = 0; i < newstate.length; i++) {
+            this.$emit("setLetter", [
+              this.values[this.current][i],
+              newstate[i],
+            ]);
+          }
+
           if (this.values[this.current] == this.answer) {
             console.log("You Win!");
             window.removeEventListener("keyup", this.handleKeyPress);
-            this.$emit("popuphandler", ["You Win!", false]);
+            this.$emit("popupHandler", ["You Win!", false]);
           } else if (this.current == 5) {
             console.log("You Lose!");
             window.removeEventListener("keyup", this.handleKeyPress);
-            this.$emit("popuphandler", [this.answer, false]);
+            this.$emit("popupHandler", [this.answer, false]);
           }
           this.index = 0;
           this.current++;
@@ -138,7 +146,15 @@ export default {
         this.answer =
           this.answer[Math.floor(Math.random() * this.answer.length)];
 
-        this.answer = "scoff";
+        // answer = scoff
+        // yours
+        // 01001
+
+        // alien
+        // 00000
+
+        // could
+        // INVALID
       });
   },
   unmounted: function () {

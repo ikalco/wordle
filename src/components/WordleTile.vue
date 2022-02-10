@@ -79,7 +79,6 @@ div.box {
   line-height: 2em;
 
   border: solid #d3d6da 3px;
-  transition: transform 1s;
 }
 
 div.scalebounce {
@@ -88,7 +87,6 @@ div.scalebounce {
 
 div.typed {
   border: solid #878a8c 3px;
-  transform: scale(1);
 }
 
 @keyframes ScaleBounce {
