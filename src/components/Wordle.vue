@@ -130,7 +130,7 @@ export default {
         setTimeout(() => {
           this.invalids[this.current] = false;
         }, 600);
-        this.$emit("popuphandler", ["Invalid", true]);
+        this.$emit("popupHandler", ["Invalid", true]);
         console.log("Invalid Word");
       }
     },
