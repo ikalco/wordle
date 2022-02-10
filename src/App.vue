@@ -1,13 +1,17 @@
 <template>
-  <Wordle></Wordle>
+  <PopupHandler ref="popuphandler"></PopupHandler>
+  <Wordle @popuphandler="$refs.popuphandler.addPopup($event)"></Wordle>
 </template>
 
 <script>
+import PopupHandler from "./components/PopupHandler.vue";
 import Wordle from "./components/Wordle.vue";
+
 export default {
   name: "App",
   components: {
     Wordle,
+    PopupHandler,
   },
 };
 </script>

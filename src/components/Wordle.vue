@@ -71,35 +71,29 @@ export default {
         this.allowedWords[this.values[this.current]] ||
         this.possibleAnswers[this.values[this.current]]
       ) {
-        if (this.values[this.current] == this.answer) {
-          console.log("You Win!");
-          window.removeEventListener("keyup", this.handleKeyPress);
-        }
+        let newstate = [-1, -1, -1, -1, -1];
+        let answer = this.answer.toLocaleUpperCase();
 
-        let lettersAnswered = {};
-        let newstate = [0, 0, 0, 0, 0];
-        for (let i = 0; i < this.states[this.current].length; i++) {
-          if (this.values[this.current][i] == this.answer[i]) {
+        for (let i = 0; i < newstate.length; i++) {
+          const char = this.values[this.current][i].toLocaleUpperCase();
+          let answerr = this.answer.toLocaleUpperCase();
+          if (char == answerr[i]) {
             newstate[i] = 2;
-          } else if (this.answer.includes(this.values[this.current][i])) {
-            newstate[i] = 1;
-          } else {
+            answer = answer.substring(0, i - 1) + answer.substring(i);
+          } else if (!answerr.includes(char)) {
             newstate[i] = 0;
-          }
-
-          if (
-            lettersAnswered[this.values[this.current][i]] == undefined ||
-            newstate[i] > lettersAnswered[this.values[this.current][i]]
-          ) {
-            lettersAnswered[this.values[this.current][i]] = newstate[i];
           }
         }
-        for (let i = 0; i < this.states[this.current].length; i++) {
-          if (
-            lettersAnswered[this.values[this.current][i]] != undefined &&
-            newstate[i] < lettersAnswered[this.values[this.current][i]]
-          ) {
-            newstate[i] = 0;
+
+        for (let i = 0; i < newstate.length; i++) {
+          const char = this.values[this.current][i].toLocaleUpperCase();
+          if (newstate[i] == -1) {
+            console.log(char, answer);
+            let index = answer.indexOf(char);
+            if (index != -1) {
+              answer = answer.substring(0, index) + answer.substring(index + 1);
+              newstate[i] = 1;
+            } else newstate[i] = 0;
           }
         }
 
@@ -111,10 +105,14 @@ export default {
 
         this.flipping = true;
         setTimeout(() => {
-          if (this.current == 5) {
+          if (this.values[this.current].toLocaleUpperCase() == this.answer) {
+            console.log("You Win!");
+            window.removeEventListener("keyup", this.handleKeyPress);
+            this.$emit("popuphandler", ["You Win!", false]);
+          } else if (this.current == 5) {
             console.log("You Lose!");
             window.removeEventListener("keyup", this.handleKeyPress);
-            alert(`Answer is: ${this.answer}!`);
+            this.$emit("popuphandler", [this.answer, false]);
           }
           this.index = 0;
           this.current++;
@@ -125,6 +123,7 @@ export default {
         setTimeout(() => {
           this.invalids[this.current] = false;
         }, 600);
+        this.$emit("popuphandler", ["Invalid", true]);
         console.log("Invalid Word");
       }
     },
@@ -139,6 +138,8 @@ export default {
         this.answer = Object.keys(this.possibleAnswers);
         this.answer =
           this.answer[Math.floor(Math.random() * this.answer.length)];
+
+        this.answer = "scoff";
       });
   },
   unmounted: function () {
