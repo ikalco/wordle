@@ -59,7 +59,7 @@ export default {
         } else if (event.which >= 65 && event.which <= 90 && this.index < 5) {
           this.values[this.current] =
             this.values[this.current].substring(0, this.index) +
-            event.key +
+            event.key.toLocaleLowerCase() +
             this.values[this.current].substring(this.index + 1);
 
           this.index++;
@@ -72,11 +72,11 @@ export default {
         this.possibleAnswers[this.values[this.current]]
       ) {
         let newstate = [-1, -1, -1, -1, -1];
-        let answer = this.answer.toLocaleUpperCase();
+        let answer = this.answer;
 
         for (let i = 0; i < newstate.length; i++) {
-          const char = this.values[this.current][i].toLocaleUpperCase();
-          let answerr = this.answer.toLocaleUpperCase();
+          const char = this.values[this.current][i];
+          let answerr = this.answer;
           if (char == answerr[i]) {
             newstate[i] = 2;
             answer = answer.substring(0, i - 1) + answer.substring(i);
@@ -86,9 +86,8 @@ export default {
         }
 
         for (let i = 0; i < newstate.length; i++) {
-          const char = this.values[this.current][i].toLocaleUpperCase();
+          const char = this.values[this.current][i];
           if (newstate[i] == -1) {
-            console.log(char, answer);
             let index = answer.indexOf(char);
             if (index != -1) {
               answer = answer.substring(0, index) + answer.substring(index + 1);
@@ -105,7 +104,7 @@ export default {
 
         this.flipping = true;
         setTimeout(() => {
-          if (this.values[this.current].toLocaleUpperCase() == this.answer) {
+          if (this.values[this.current] == this.answer) {
             console.log("You Win!");
             window.removeEventListener("keyup", this.handleKeyPress);
             this.$emit("popuphandler", ["You Win!", false]);
