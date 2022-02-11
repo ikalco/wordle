@@ -34,7 +34,13 @@ export default {
 </script>
 
 <style scoped>
+div {
+  touch-action: manipulation;
+}
+
 div.tile {
+  display: inline-block;
+
   text-align: center;
   line-height: 3.2rem;
 
@@ -50,7 +56,13 @@ div.tile {
   padding: 0;
   border-radius: 5px;
 
-  transition: background-color 500ms;
+  transition: background-color 100ms ease, color 100ms;
+
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
 }
 
 div.default {
