@@ -6,10 +6,10 @@
       wrong: isWrong(),
       present: isPresent(),
       correct: isCorrect(),
-      flipin: flipin,
-      flipout: flipout,
-      shake: invalid,
-      scalebounce: scalebounce,
+      flipin: this.flipin,
+      flipout: this.flipout,
+      shake: this.invalid,
+      scalebounce: this.scalebounce,
     }"
   >
     {{ this.value.toLocaleUpperCase() }}
@@ -23,6 +23,7 @@ export default {
     value: String,
     state: Number,
     invalid: Boolean,
+    reset: Number,
   },
   methods: {
     isTyped() {
@@ -61,24 +62,37 @@ export default {
         }, 100);
       }
     },
+    reset: function () {
+      this.flipin = false;
+      this.flipout = false;
+      this.scalebounce = false;
+      console.log(this.value, this.state, this.invalid, this.reset);
+    },
   },
 };
 </script>
 
 <style scoped>
 div.box {
-  text-align: center;
+  display: inline-flex;
 
-  font-family: sans-serif;
-  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  flex: 1;
   font-size: 2rem;
-  user-select: none;
-
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
 
   border: solid #d3d6da 3px;
+  color: black;
+}
+
+div.box::before {
+  content: "";
+  display: inline-block;
+  padding-bottom: 100%;
 }
 
 div.scalebounce {

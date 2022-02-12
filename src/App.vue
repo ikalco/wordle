@@ -1,15 +1,17 @@
 <template>
-  <div class="game">
-    <PopupHandler ref="popuphandler"></PopupHandler>
-    <Wordle
-      @popupHandler="$refs.popuphandler.addPopup($event)"
-      @setLetter="$refs.keyboard.setLetter($event)"
-      ref="wordle"
-    ></Wordle>
-    <Keyboard
-      ref="keyboard"
-      @keyPressed="$refs.wordle.handleKeyPress($event)"
-    ></Keyboard>
+  <div id="game">
+    <div id="center">
+      <PopupHandler ref="popuphandler" @reset="this.resetGame()"></PopupHandler>
+      <Wordle
+        @popupHandler="$refs.popuphandler.addPopup($event)"
+        @setLetter="$refs.keyboard.setLetter($event)"
+        ref="wordle"
+      ></Wordle>
+      <Keyboard
+        ref="keyboard"
+        @keyPressed="$refs.wordle.handleKeyPress($event)"
+      ></Keyboard>
+    </div>
   </div>
 </template>
 
@@ -25,51 +27,33 @@ export default {
     PopupHandler,
     Keyboard,
   },
+  methods: {
+    resetGame() {
+      this.$refs.wordle.resetState();
+      this.$refs.popuphandler.resetState();
+      this.$refs.keyboard.resetState();
+    },
+  },
 };
 </script>
 
 <style>
-div.game {
-  display: grid;
-  align-items: center;
-  justify-items: center;
-
-  height: 100vh;
+html {
+  font-family: sans-serif;
+  font-weight: bold;
 }
 
-@media only screen and (min-width: 280px) {
-  html {
-    font-size: 8px;
-  }
+div#game {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
-@media only screen and (min-width: 320px) {
-  html {
-    font-size: 9px;
-  }
-}
-
-@media only screen and (min-width: 375px) {
-  html {
-    font-size: 10px;
-  }
-}
-
-@media only screen and (min-width: 425px) {
-  html {
-    font-size: 12px;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-@media only screen and (min-width: 1024px) {
-  html {
-    font-size: 24px;
-  }
+div#center {
+  display: table-cell;
+  vertical-align: middle;
 }
 </style>

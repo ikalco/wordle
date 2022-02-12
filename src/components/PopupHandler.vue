@@ -7,6 +7,7 @@
       :fade="popup[1]"
       :identifier="popup[2]"
       @deletepopup="deletePopup($event)"
+      @click="resetGame(popup[1])"
     ></Popup>
   </div>
 </template>
@@ -31,6 +32,14 @@ export default {
     deletePopup(popup) {
       this.popups.splice(this.popups.indexOf(popup), 1);
     },
+    resetGame(popup) {
+      if (popup == false) {
+        this.$emit("reset");
+      }
+    },
+    resetState() {
+      this.popups = [];
+    },
   },
 };
 </script>
@@ -40,6 +49,6 @@ div.popupContainer {
   position: absolute;
   top: 7%;
 
-  height: 93%;
+  width: 100%;
 }
 </style>

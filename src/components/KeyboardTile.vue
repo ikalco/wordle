@@ -1,11 +1,12 @@
 <template>
   <div
     :class="{
-      tile: true,
+      keyboardtile: true,
       default: isDefault(),
       wrong: isWrong(),
       present: isPresent(),
       correct: isCorrect(),
+      last: isLast(),
     }"
   >
     {{ this.letter }}
@@ -15,7 +16,7 @@
 <script>
 export default {
   name: "Legend",
-  props: ["letter", "type"],
+  props: ["letter", "type", "last"],
   methods: {
     isDefault() {
       return this.type == -1;
@@ -29,6 +30,9 @@ export default {
     isCorrect() {
       return this.type == 2;
     },
+    isLast() {
+      return this.$.vnode.key == this.last;
+    },
   },
 };
 </script>
@@ -38,31 +42,28 @@ div {
   touch-action: manipulation;
 }
 
-div.tile {
-  display: inline-block;
+div.keyboardtile {
+  display: flex;
 
-  text-align: center;
-  line-height: 3.2rem;
+  justify-content: center;
+  align-items: center;
 
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 1.5rem;
-  user-select: none;
+  flex: 1;
 
-  width: 3rem;
-  height: 3rem;
-
-  border: 0;
   padding: 0;
+  border: 0;
+
   border-radius: 5px;
+  margin: 0 4.8px 0 0;
+
+  max-width: 48px;
+  height: 48px;
 
   transition: background-color 100ms ease, color 100ms;
+}
 
-  margin-left: 0.1em;
-  margin-right: 0.1em;
-
-  margin-top: 0.2em;
-  margin-bottom: 0.2em;
+div.last {
+  margin: 0;
 }
 
 div.default {

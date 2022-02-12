@@ -56,7 +56,8 @@ div.container {
   border-radius: 5px;
 
   position: relative;
-  margin-top: 10%;
+  margin: auto;
+  margin-top: 10px;
 }
 
 div.fade {

@@ -6,6 +6,7 @@
       :values="value"
       :states="states[index]"
       :invalid="invalids[index]"
+      :reset="this.reset"
     ></WordleRow>
   </div>
 </template>
@@ -36,6 +37,7 @@ export default {
       possibleAnswers: {},
       answer: "",
       flipping: false,
+      reset: 0,
     };
   },
   methods: {
@@ -113,13 +115,16 @@ export default {
           }
 
           if (this.values[this.current] == this.answer) {
-            console.log("You Win!");
             window.removeEventListener("keyup", this.handleKeyPress);
             this.$emit("popupHandler", ["You Win!", false]);
+            this.$emit("popupHandler", ["Press to Restart", false]);
           } else if (this.current == 5) {
-            console.log("You Lose!");
             window.removeEventListener("keyup", this.handleKeyPress);
-            this.$emit("popupHandler", [this.answer, false]);
+            this.$emit("popupHandler", [
+              `Answer Is ${this.answer.toLocaleUpperCase()}`,
+              false,
+            ]);
+            this.$emit("popupHandler", ["Press to Restart", false]);
           }
           this.index = 0;
           this.current++;
@@ -131,8 +136,30 @@ export default {
           this.invalids[this.current] = false;
         }, 600);
         this.$emit("popupHandler", ["Invalid", true]);
-        console.log("Invalid Word");
       }
+    },
+    resetState() {
+      this.current = 0;
+      this.index = 0;
+      this.values = ["     ", "     ", "     ", "     ", "     ", "     "];
+      this.invalids = [false, false, false, false, false, false];
+      this.states = [
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1],
+      ];
+      this.flipping = false;
+
+      window.addEventListener("keyup", this.handleKeyPress);
+      this.answer = Object.keys(this.possibleAnswers);
+      this.answer = this.answer[Math.floor(Math.random() * this.answer.length)];
+
+      setTimeout(() => {
+        this.reset++;
+      }, 300);
     },
   },
   mounted: function () {
@@ -145,16 +172,6 @@ export default {
         this.answer = Object.keys(this.possibleAnswers);
         this.answer =
           this.answer[Math.floor(Math.random() * this.answer.length)];
-
-        // answer = scoff
-        // yours
-        // 01001
-
-        // alien
-        // 00000
-
-        // could
-        // INVALID
       });
   },
   unmounted: function () {
@@ -166,11 +183,16 @@ export default {
 <style scoped>
 div.wordle {
   display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
 
-  grid-template-columns: min-content min-content min-content min-content min-content;
-  grid-template-rows: auto auto auto auto auto auto;
+  user-select: none;
 
-  column-gap: 0.5em;
-  row-gap: 0.5em;
+  width: 382px;
+  height: 460px;
+
+  margin: auto;
 }
 </style>
